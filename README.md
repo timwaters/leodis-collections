@@ -12,11 +12,19 @@ There are four main components to the site:
 
 1) Front page showing all collections
 
+![Alt text](docs/front-page.png?raw=true "Front Page")
+
 2) Collection view showing a collection and all photos within that collection
+
+![Alt text](docs/collections-page.png?raw=true "Collection Page")
 
 3) Photo view showing an individual photo
 
-4) Admin django admin
+![Alt text](docs/photo-page.png?raw=true "Photo Page")
+
+4) Admin django admin pages
+
+![Alt text](docs/admin-pages.png?raw=true "Admin Pages")
 
 It is tightly integrated with the exising Leodis.net website. Photos have to have a filename which is same UUID as used in the Leodis.net site. Metadata about the photos is queried using BeautifulSoup. Additionally memories, comments about the photos are also retrieved from Leodis.net. 
 
