@@ -1,0 +1,9 @@
+*.swp
+*.pyo
+*.pyc
+media_root/photos/*
+local_settings.py
+tmp/
+static/
+db.local_sqlite3
+

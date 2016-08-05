@@ -1,0 +1,93 @@
+{% extends 'gallery/base.html' %}
+{% load staticfiles %}
+{% block page_title %} All Collections {% endblock %}
+{% block extra_head %}
+<script type="text/javascript">
+  $(function() {
+    var options = {minMargin: 15, maxMargin: 35, itemSelector: ".grid-item",  firstItemClass: "first-item"};
+    $(".grid").rowGrid(options);
+  });
+  </script>
+{% endblock %}
+{% load thumbnail %}
+
+{% block content %}
+<div id="index_header">
+  <div id="index_description">
+  {% if about_text  %}
+    {{ about_text }}
+  {% else %}
+     Leodis Collections is a view into the Leeds Libraries photo archive Leodis.net. You can view a range of curated photos for a number of collections or themes. The collections are Arcades, Parks, Public Houses, Cinemas and Shopping. Most of the photos have been added to a map for the first time. Leodis Collections is a product of Leeds City Council Innovation labs.
+  {% endif %}
+</div>
+</div>
+<div id="collections_grid">
+  <div class="grid">
+
+  {% for collection in featured_collections %}
+    <div class="grid-item">
+      <a href="{% url 'collection' collection.id %}">
+        <div class="collection_caption"><span class="prefix"></span>{{ collection.title }}</div>
+        {% thumbnail collection.featured_photo.image 0x400 upscale as thumb %}
+        <img src="{{ thumb.url }}"
+          width="{{ thumb.width }}"
+          height="{{ thumb.height }}" />
+          
+        <div class="mini_thumbs">
+          <table>
+          <tr>
+            {% for related_photo in collection.related_photos %}
+            {% if thumb.width > 400 or forloop.counter < 3 %}
+              <td>
+                {% thumbnail related_photo.image 100x100 crop as mini_thumb %}
+                <img src="{{ mini_thumb.url }}"
+                  width="{{ mini_thumb.width }}"
+                  height="{{ mini_thumb.height }}" />
+              </td>
+            {% endif %}
+            {% endfor %}
+          </tr>
+          </table>
+        </div>
+  
+      </a>
+    </div>
+  {% endfor %}
+  
+  {% for collection in collections %}
+    <div class="grid-item">
+      <a href="{% url 'collection' collection.id %}">
+        <div class="collection_caption">{{ collection.title }}</div>
+        {% thumbnail collection.featured_photo.image 0x400 upscale as thumb %}
+        <img src="{{ thumb.url }}"
+          width="{{ thumb.width }}"
+          height="{{ thumb.height }}" />   
+          
+          <div class="mini_thumbs">
+            <table>
+            <tr>
+              {% for related_photo in collection.related_photos %}
+            
+              {% if thumb.width > 400 or forloop.counter < 3 %}
+                <td>
+                  {% thumbnail related_photo.image 100x100 crop as mini_thumb %}
+                  <img src="{{ mini_thumb.url }}"
+                    width="{{ mini_thumb.width }}"
+                    height="{{ mini_thumb.height }}" />
+                </td>
+              {% endif %}
+              {% endfor %}
+            </tr>
+            </table>
+          </div>
+             
+      </a>
+    </div>
+  {% endfor %}
+  
+  </div>
+
+</div>
+
+
+{% endblock %}

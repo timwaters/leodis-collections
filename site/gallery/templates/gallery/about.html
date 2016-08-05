@@ -1,0 +1,57 @@
+{% extends 'gallery/base.html' %}
+{% block page_title %} About & Contact {% endblock %}
+
+{% block content %}
+
+<div id="collection_header">
+  <h1>About & Contact</h1>
+  
+  <div id="collection_description">
+  {% if about_text  %}
+    {{ about_text | safe }}
+  {% else %}
+      
+    <h2>Leodis Collections</h2>
+    <p>Leodis Collections is a view into the <a href="http://www.leeds.gov.uk/libraries">Leeds Library Information Service</a> photo archive <a href="http://leodis.net">Leodis.net</a>, in showing the changing shape of the City of Leeds. You can view a range of curated photos for a number of collections or themes. The collections are Arcades, Parks, Public Houses, Cinemas and Shopping. Most of the photos have been added to a map and each collection has a map view. Leodis Collections is a pilot website to showcase a range of interesting photos from the Leeds Library Photography Collection of the city of Leeds, West Yorkshire, UK. It is a product of the Leeds City Council's Innovation Labs  - collaborations between local technologists and Council departments. </p>
+
+    <p>This site is developed and hosted by Tim Waters, a Leeds based freelance web developer in collaboration with Library and Information Service.</p>
+
+
+    <h2>Feedback & Contact</h2>
+    <p>Please feel free to contact us at if you have any questions about the site.</p> 
+
+    <h3>Contact Details</h3>
+    <p>
+    Leodis Office<br />
+    Central Library<br />
+    Municipal Buildings<br />
+    Calverley Street<br />
+    Leeds<br />
+    LS1 3AB
+  </p>
+  <p>
+    Telephone: Please contact the Local and Family History Library  0113 2478290
+</p>
+<p>
+    Email : LocalandFamilyHistory@leeds.gov.uk 
+    </p> 
+
+    <h2>Copyright</h2>
+    <p>© Copyright. Many of the images on this site are under various copyrights. Please see the relevant page for the photo on Leodis.net for specifics.</p>
+    <p>
+     Unless otherwise stated, the copyright, database rights and similar rights in all material published on this site are owned by Leeds Library and Information Service, Leeds City Council.
+     </p>
+     <p>
+    By viewing a digital image from this collection, you are agreeing to comply with copyright licensing regulations. These state that your use of the image is for personal use only, and that you will not copy, publish or distribute the image in any way.
+    </p>
+    <p>
+    Please contact the Library if you wish to print or make your own copy of any photo.
+    </p>
+    </p>
+    
+ {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+

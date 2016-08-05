@@ -1,0 +1,86 @@
+{% extends 'gallery/base.html' %}
+{% block page_title %} {{collection.title}} {% endblock %}
+
+{% block extra_head %}  
+{% load leaflet_tags %}
+{% leaflet_js %}
+{% leaflet_css %}
+  
+<script type="text/javascript">
+  $(function() {
+    var options = {minMargin: 15, maxMargin: 35, itemSelector: ".grid-item",  firstItemClass: "first-item"};
+    $(".grid").rowGrid(options);
+    
+    $(".grid-item").hover(function(){
+      $('.photo_caption', this).fadeIn(200);  
+    },function(){  
+      $('.photo_caption', this).fadeOut(400);  
+    });
+      
+
+  });
+  function main_map_init (map, options) {
+    var dataurl = '{% url "gallery.views.collection_geojson" collection.id %}';
+       // Download GeoJSON via Ajax
+       $.getJSON(dataurl, function (data) {
+           // Add GeoJSON layer
+           L.geoJson(data,{onEachFeature: onEachFeature}).addTo(map);
+       });
+  }
+  function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.title) {
+      popup_html = "<div class='popup'><a href='/photo/"+feature.properties.id+"'><span class='popup-title'>"+feature.properties.title +"</span><br /><img src="+ feature.properties.icon +" /></a></div>";
+        layer.bindPopup(popup_html);
+    }
+}
+
+
+</script>
+{% endblock %}
+
+{% load thumbnail %}
+
+{% block content %}
+
+<div id="collection_header">
+  <ul  class="breadcrumb">
+    <li class="level-1">
+      <a href="/">
+        Collections
+      </a>
+    </li>
+  </ul>
+  <h1>{{ collection.title }} ({{collection.photo_set.all.count}} photos)</h1>
+  <div id="collection_description">
+  {{ collection.description }}
+  </div>
+</div>
+
+<div id="collection_map_container">
+
+  {% leaflet_map "collection_map" callback="main_map_init" settings_overrides=map_settings %}
+</div>
+
+<div id="photos_grid">
+  <div class="grid">
+  {% for photo in collection.photo_set.all %}
+    <div class="grid-item">
+      <a href="{% url 'photo' photo.id %}">
+        
+        {% thumbnail photo.image 0x400 upscale as thumb %}
+        <img src="{{ thumb.url }}"
+          width="{{ thumb.width }}"
+          height="{{ thumb.height }}"
+          alt="{{ photo.title }}" />
+        <div class="photo_caption">{{ photo.title }}</div>           
+      </a>
+    </div>
+  
+  {% endfor %}
+  </div>
+
+</div>
+
+</div>
+{% endblock %}

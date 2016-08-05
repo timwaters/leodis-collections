@@ -1,0 +1,102 @@
+{% extends 'gallery/base.html' %}
+{% block page_title %} {{photo.title}} {% endblock %}
+{% block extra_head %}
+{% load leaflet_tags %}
+{% leaflet_js %}
+{% leaflet_css %}
+<script type="text/javascript">
+  function main_map_init (map, options) {
+    var data  ={ 'type': 'Feature',
+      'properties': "properties",
+      'geometry': {{ photo_json|safe }}
+    };
+    if (data["geometry"]){
+      L.geoJson(data,{}).addTo(map);
+    }  
+  }
+</script>
+{% endblock %}
+{% load thumbnail %}
+
+{% block content %}
+
+<div id="photo_header">
+  <ul  class="breadcrumb">
+    <li class="level-1">
+      <a href="/">
+        Collections
+      </a>
+    </li>
+    <li class="level-2">
+      <a href="{% url 'collection' photo.collection.id %}">
+        {{ photo.collection.title }}
+      </a>
+    </li>
+  </ul>
+  <h1>{{ photo.title }}</h1>
+  <div id="photo_description">
+  {{ photo.description }}
+  </div>
+</div>
+
+<div id="photo_container">
+  
+  <div class="photo_div grid-70 mobile-grid-100">
+    {% thumbnail photo.image 1000x1000 as thumb %}
+    
+    <img src="{{ thumb.url }}"
+      width="{{ thumb.width }}"
+      height="{{ thumb.height }}" class="big_photo" />      
+  </div>
+  
+  <div class="photo_meta grid-25 mobile-grid-100">
+    {% leaflet_map "photo_map" callback="main_map_init" settings_overrides=map_settings %}
+    <div class="photo_meta_text">
+      <h3>About this image</h3>
+      Subject ID: {{photo.subject_id}} <br />
+      {% if photo.year %}
+      Subject Year: {{photo.year}}<br />
+      {% endif %}
+      {% if photo.creator %}
+        Creator / Copyright: {{ photo.creator }} / Leeds Library & Information Services<br />
+      {% else %}
+        Copyright: Leeds Library & Information Services<br />
+      {% endif %}
+      
+      <a href="http://www.leodis.net/display.aspx?resourceIdentifier={{photo.subject_id}}">View on Leodis.net</a>
+    </div>
+    <!-- social buttons -->
+    <div class="addthis_sharing_toolbox"></div>
+    <!-- social buttons -->
+  </div>
+
+</div>
+<div id="memories_container">
+  <h3>Memories</h3>
+
+    {% for memory in memories %}
+    <div class="memory">
+      <div class="memory_text">
+        {{memory.text}}
+      </div>
+      <div class="memory_name">
+        {{memory.name}}
+      </div>
+    </div>
+    {% endfor %}
+
+  <div class="memories_footer">
+    
+    <a href="http://www.leodis.net/display.aspx?resourceIdentifier={{photo.subject_id}}&DISPLAY=FULL">
+      {% if memories %}
+        View more and add your own memories on Leodis.net
+      {% else %}
+        Add your own memories on Leodis.net
+      {% endif %}
+    </a>
+  </div>
+</div>
+
+
+{% endblock %}
+
